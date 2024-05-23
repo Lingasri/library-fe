@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './EditBooksComponent.css';
+import './DeleteBooksComponent.css';
 import axios from 'axios';
 
-const EditBooksComponent = () => {
+const DeleteBooksComponent = () => {
   const [bookInfo, setBookInfo] = useState({
     bookName: '',
     authorName: '',
@@ -64,13 +64,14 @@ const EditBooksComponent = () => {
     event.preventDefault();
 
     axios
-      .patch('http://localhost:3500/api/v1/books',bookInfo)
+      .delete('http://localhost:3500/api/v1/books',{data : bookInfo})
       .then((response) =>
       {
         if(response.data.acknowledged === true)
-        alert(`${bookInfo.bookName} is updated successfully`);
+        {
+        alert(`${bookInfo.bookName} is deleted successfully`);
         window.location.href = '/';
-        })
+        }})
       .catch((error) => {
         if(error.response)
         {
@@ -83,7 +84,7 @@ const EditBooksComponent = () => {
 
   return (
     <form className="form-container" onSubmit={formSubmitHandler}>
-      <h2>Updating books</h2>
+      <h2>Deleting books</h2>
 
       <div className="form-group">
         <label>ISBN Number</label>
@@ -143,10 +144,10 @@ const EditBooksComponent = () => {
       </div>
 
       <div>
-        <button type="submit">Update</button>
+        <button type="submit">Delete</button>
       </div>
     </form>
   );
 };
 
-export default EditBooksComponent;
+export default DeleteBooksComponent;

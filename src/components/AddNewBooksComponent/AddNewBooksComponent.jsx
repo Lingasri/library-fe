@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import './AddNewBooksComponent.css'
-import axios from 'axios'
+import React, { useState } from 'react';
+import './AddNewBooksComponent.css';
+import axios from 'axios';
 
 const AddNewBooksComponent = () => {
   const [bookInfo, setBookInfo] = useState({
@@ -38,12 +38,25 @@ const AddNewBooksComponent = () => {
     });
   };
 
-  const { bookName, authorName, ISBN, genre } = bookInfo;
-
   const formSubmitHandler = (event) => {
-    
-  }
+    event.preventDefault();
 
+    axios
+      .post(`http://localhost:3500/api/v1/books/`, bookInfo)
+      .then((response) => {
+        console.log(response)
+        alert(`${response.data.bookName} is added successfully.`)
+        window.location.href='/'
+      })
+      .catch((error) => {
+        if(error.response)
+        {
+          alert(`(Status : ${error.response.status}) ${error.response.data.message}`);
+        }
+      })
+  };
+
+  const { bookName, authorName, ISBN, genre } = bookInfo;
 
   return (
     <form className='form-container' onSubmit={formSubmitHandler}>
@@ -86,13 +99,21 @@ const AddNewBooksComponent = () => {
 
       <div className='form-group'>
         <label>Genre</label>
-        <input
-          type='text'
-          placeholder='Enter the genre'
+        <select
           value={genre}
           onChange={genreHandler}
           required
-        />
+        >
+          <option value="">Select a genre</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Romance">Romance</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Historical Fiction">Historical Fiction</option>
+          <option value="Thriller">Thriller</option>
+        </select>
       </div>
 
       <div>
